@@ -59,7 +59,6 @@ $Clients = @(
     @{ Nom = 'Owishop';        Motif = 'owishop';                                        Statut = 'Actif' }
     @{ Nom = 'MailSense';      Motif = 'mail.?sense';                                    Statut = 'Actif' }
     @{ Nom = 'Hotel-Guest-eXperience'; Motif = 'hotel|concierge|conciergerie|check.?in|whatsapp.?(agent|concierge)|gxol|guest.?experience|^gx-|functional.?specification|sp[eé]cification.?fonctionnelle|technical.?specification'; Statut = 'Actif' }
-    @{ Nom = 'Voltaren';       Motif = 'voltaren|voltaheat';                             Statut = 'Actif' }
     @{ Nom = 'Berberi';        Motif = 'berberi';                                        Statut = 'Actif' }
     @{ Nom = 'Frin';           Motif = '(^|[^a-z])frin([^a-z]|$)';                       Statut = 'Actif' }
     @{ Nom = 'Premodelisation-juridique-IA'; Motif = 'pre.?mod[eé]lisation';             Statut = 'Actif' }
@@ -108,6 +107,8 @@ $Cibles = @('01_Alpha-Omega-AI\Clients','01_Alpha-Omega-AI\Offres-et-methodes','
 $NomsCibles = '^(00_A-trier|01_Alpha-Omega-AI|02_Softel-Stellantis|03_DermaOxy-France|04_Personnel|99_Archives)$'
 # Dossiers d'applications laissés en place dans Documents
 $Laisser = '^(desktop\.ini|Custom Office Templates|Modèles Office personnalisés|Fichiers Outlook|Outlook Files|WindowsPowerShell|PowerShell|Zoom|My Music|My Pictures|My Videos|Ma musique|Mes images|Mes vidéos|Sound recordings|Enregistrements audio|Visual Studio.*|IISExpress|My Web Sites|Default\.rdp)$'
+# Projets que vous avez demandé de supprimer : mis de côté pour suppression
+$ASupprimer  = 'voltaren|voltaheat'
 $Installeurs = '\.(exe|msi|msix|msixbundle|appx|appxbundle|dmg|pkg|iso)$'
 $Temporaires = '^(~\$.*|thumbs\.db|\.ds_store)$|\.(tmp|crdownload|part|partial|adding)$'
 $Archives    = '\.(zip|rar|7z)$'
@@ -213,6 +214,7 @@ foreach ($it in $Elements) {
     if ($it.PSIsContainer -and $nom -match '^bureau[\s_-]*\d{6,8}$') {
         Add-Action $it '99_Archives' 'déplacement' 'Ancienne sauvegarde de bureau, archivée telle quelle'; continue
     }
+    if ($nom -match $ASupprimer) { Add-Action $it $Corbeille 'à valider' 'Projet à supprimer (demandé)'; continue }
     if (-not $it.PSIsContainer) {
         if ($Doublons.ContainsKey($it.FullName)) { Add-Action $it $Corbeille 'à valider' "Doublon exact de : $($Doublons[$it.FullName])"; continue }
         if ($nom -match $Temporaires)  { Add-Action $it $Corbeille 'à valider' 'Fichier temporaire / verrou Office / téléchargement incomplet'; continue }
