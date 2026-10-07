@@ -31,7 +31,7 @@ foreach ($d in $Downloads, $Documents) { if (-not (Test-Path -LiteralPath $d)) {
 
 if (Get-Process -Name OneDrive -ErrorAction SilentlyContinue) {
     Write-Host 'OneDrive est encore ouvert. Dissociez ce PC de OneDrive et quittez OneDrive, puis relancez le script.' -ForegroundColor Red
-    exit 1
+    return
 }
 # Fichiers « uniquement en ligne » (nuage) : ils ne sont pas sur le disque, les déplacer les casserait.
 $EnLigne = @($Sources | ForEach-Object { Get-ChildItem -LiteralPath $_ -Recurse -File -Force -ErrorAction SilentlyContinue } |
@@ -41,7 +41,7 @@ if ($EnLigne.Count -gt 0) {
     $EnLigne.FullName | Set-Content -Encoding UTF8 $liste
     Write-Host "$($EnLigne.Count) fichier(s) ne sont que dans le nuage OneDrive (liste : $liste)." -ForegroundColor Red
     Write-Host 'Rouvrez OneDrive, clic droit sur le dossier OneDrive > « Toujours conserver sur cet appareil », attendez la fin, puis dissociez et relancez.' -ForegroundColor Red
-    exit 1
+    return
 }
 $Stamp     = Get-Date -Format 'yyyy-MM-dd_HHmm'
 $ATrier    = '00_A-trier'
