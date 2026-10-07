@@ -55,6 +55,8 @@ $Clients = @(
     # En cours (fichiers 2025-2026)
     @{ Nom = 'Hotel-Concierge-WhatsApp'; Motif = 'hotel|concierge|check.?in|whatsapp.?(agent|concierge)'; Statut = 'Actif' }
     @{ Nom = 'Premodelisation-juridique-IA'; Motif = 'pre.?mod[eé]lisation';  Statut = 'Actif' }
+    @{ Nom = 'MailSense';   Motif = 'mail.?sense';          Statut = 'Actif'   }
+    @{ Nom = 'OWI';         Motif = '(^|[^a-z])owi([^a-z]|$)'; Statut = 'Actif' }
     @{ Nom = 'Knwler';      Motif = 'knwler';               Statut = 'Actif'   }
     @{ Nom = 'SPERO';       Motif = 'spero';                Statut = 'Actif'   }
     # Terminés
@@ -169,6 +171,11 @@ $Elements = @()
 $Elements += Get-ChildItem -LiteralPath $Downloads -Force
 $Elements += $Sources | Where-Object { $_ -ne $Downloads } | ForEach-Object { Get-ChildItem -LiteralPath $_ -Force } |
     Where-Object { $_.Name -notmatch $NomsCibles -and $_.Name -notmatch $Laisser }
+# Dossiers « fourre-tout » de la société : on range leur contenu un par un au lieu de les déplacer en bloc
+$Conteneurs = '^(aomega|aomega[\s_-]?ai|alpha[\s_-]?omega([\s_-]?ai)?|ao[\s_-]?ai)$'
+$Elements = @($Elements | ForEach-Object {
+    if ($_.PSIsContainer -and $_.Name -match $Conteneurs) { Get-ChildItem -LiteralPath $_.FullName -Force } else { $_ }
+})
 $Laisses  = $Sources | Where-Object { $_ -ne $Downloads } | ForEach-Object { Get-ChildItem -LiteralPath $_ -Force } | Where-Object { $_.Name -match $Laisser }
 
 # --- Doublons : fichiers libres (racine Téléchargements/Documents) identiques à un autre fichier ---
