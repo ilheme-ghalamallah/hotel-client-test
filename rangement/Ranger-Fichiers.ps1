@@ -28,40 +28,50 @@ $ATrier    = '00_A-trier'
 $Corbeille = '00_A-trier\_A-valider-suppression'
 
 # ---------------------------------------------------------------------------
-# CLIENTS - seul tableau à vérifier. Statut 'Actif' -> 01_Alpha-Omega-AI\Clients\<Nom>
+# CLIENTS (déduits des noms de fichiers du PC). Statut 'Actif' -> 01_Alpha-Omega-AI\Clients\<Nom>
 #                                    Statut 'Termine' -> 99_Archives\<Nom>
 # ---------------------------------------------------------------------------
 $Clients = @(
-    @{ Nom = 'MGEN';        Motif = 'mgen';                 Statut = 'Termine'   }
-    @{ Nom = 'FoxVisit';    Motif = 'fox.?visit';           Statut = 'Termine'   }
-    @{ Nom = 'SPERO';       Motif = 'spero';                Statut = 'Termine' }
+    # En cours (fichiers 2025-2026)
+    @{ Nom = 'Hotel-Concierge-WhatsApp'; Motif = 'hotel|concierge|check.?in|whatsapp.?(agent|concierge)'; Statut = 'Actif' }
+    @{ Nom = 'Premodelisation-juridique-IA'; Motif = 'pre.?mod[eé]lisation';  Statut = 'Actif' }
+    @{ Nom = 'Knwler';      Motif = 'knwler';               Statut = 'Actif'   }
+    @{ Nom = 'SPERO';       Motif = 'spero';                Statut = 'Actif'   }
+    # Terminés
+    @{ Nom = 'MGEN';        Motif = 'mgen';                 Statut = 'Termine' }
+    @{ Nom = 'FoxVisit';    Motif = 'fox.?visit';           Statut = 'Termine' }
     @{ Nom = 'TFO';         Motif = '(^|[^a-z])tfo';        Statut = 'Termine' }
-    @{ Nom = 'Apivia';      Motif = 'apivia';               Statut = 'Termine' }
     @{ Nom = 'AFPA';        Motif = 'afpa';                 Statut = 'Termine' }
     @{ Nom = 'Mobilis';     Motif = 'mobilis';              Statut = 'Termine' }
+    @{ Nom = 'Apivia';      Motif = 'apivia';               Statut = 'Termine' }
     @{ Nom = 'ThoughtSpot'; Motif = 'thought.?spot';        Statut = 'Termine' }
-    @{ Nom = 'Nexidia';     Motif = 'nexidia';              Statut = 'Termine' }
     @{ Nom = 'MoniA';       Motif = 'monia';                Statut = 'Termine' }
-    @{ Nom = 'Governata';   Motif = 'governata';            Statut = 'Termine' }
+    @{ Nom = 'Governata';   Motif = 'governata|naima';      Statut = 'Termine' }
     @{ Nom = 'Finbursa';    Motif = 'finbursa';             Statut = 'Termine' }
     @{ Nom = 'CAFS';        Motif = 'cafs';                 Statut = 'Termine' }
+    @{ Nom = 'Cybtech';     Motif = 'cybtech';              Statut = 'Termine' }
+    @{ Nom = 'InGrav';      Motif = 'ingrav';               Statut = 'Termine' }
+    @{ Nom = 'Visioneers';  Motif = 'visioneers';           Statut = 'Termine' }
 )
 
 # Règles thématiques, testées dans l'ordre sur le nom du fichier ou du dossier.
+$AO = '(alpha.?omega|aomega|(^|[^a-z])ao[\s_-]?ai)'
 $AvantClients = @(
-    @{ M = 'softel|sofltel|stellantis|john.?paul|ai.?concierge';                       D = '02_Softel-Stellantis';                   C = 'Softel-Stellantis' }
+    @{ M = 'softel|sofltel|stellantis|john.?paul|nexidia|speech.?analytics|isms|computer use agreement'; D = '02_Softel-Stellantis'; C = 'Softel-Stellantis' }
     @{ M = 'derma.?oxy';                                                               D = '03_DermaOxy-France';                     C = 'DermaOxy' }
+    @{ M = "$AO.*(rib|iban|kbis|statut|factur|devis)|(rib|iban|kbis|statut).*$AO";     D = '01_Alpha-Omega-AI\Gestion';              C = 'Alpha-Omega-AI' }
     @{ M = '(^|[^a-z])(cockpit|radar|oii)([^a-z]|$)';                                  D = '01_Alpha-Omega-AI\Offres-et-methodes';   C = 'Alpha-Omega-AI' }
-    @{ M = 'alpha.?omega.*(logo|charte|site|brand|marque|banni|favicon)|^(logo|charte graphique|favicon)'; D = '01_Alpha-Omega-AI\Site-et-marque'; C = 'Alpha-Omega-AI' }
-    @{ M = 'edf|engie|loyer|quittance|(^|[^a-z])(free|sfr|bouygues|orange)([^a-z]|$)'; D = '04_Personnel\Administratif';             C = 'Personnel' }
+    @{ M = "$AO.*(logo|charte|site|brand|marque|banni|banner|favicon|chanel|\.html)|(logo|banni[eè]re|banner).*$AO|banni[eè]re linkedin|^(logo|charte graphique|favicon)|^alpha-omega-ai.*\.html$"; D = '01_Alpha-Omega-AI\Site-et-marque'; C = 'Alpha-Omega-AI' }
+    @{ M = $AO;                                                                        D = '01_Alpha-Omega-AI\Offres-et-methodes';   C = 'Alpha-Omega-AI' }
+    @{ M = 'edf|engie|loyer|quittance|charges|bouygues|(^|[^a-z])(free|sfr|orange)([^a-z]|$)|comptededepots|(^|[^a-z])(rib|iban)([^a-z_]|_0)|nickel|(^|[^a-z])sepa([^a-z]|$)'; D = '04_Personnel\Administratif'; C = 'Personnel' }
     @{ M = 'factur|invoice|devis|avoir|note de frais|urssaf|kbis|statuts|compta|bilan|(^|[^a-z])tva([^a-z]|$)|liasse'; D = '01_Alpha-Omega-AI\Gestion'; C = 'Alpha-Omega-AI' }
 )
 $ApresClients = @(
-    @{ M = 'contrat|contract|(^|[^a-z])nda([^a-z]|$)|(^|[^a-z])cgv([^a-z]|$)|avenant|bon de commande|purchase order|juridique|mandat'; D = '01_Alpha-Omega-AI\Gestion'; C = 'Alpha-Omega-AI' }
-    @{ M = '(^|[^a-z])(cv|resume|curriculum)([^a-z]|$)|résumé|dipl[oô]m|diploma|(^|[^a-z])phd([^a-z]|$)|th[eè]se|publication|certificat|relev[eé] de notes'; D = '04_Personnel\Parcours'; C = 'Personnel' }
-    @{ M = 'imp[oô]t|imposition|passeport|passport|(^|[^a-z])cni([^a-z]|$)|carte.?(vitale|identit)|(^|[^a-z])caf([^a-z]|$)|ameli|cpam|mutuelle|france.?travail|p[oô]le.?emploi|arr[eê]t|m[eé]decin|ordonnance|(^|[^a-z])bail([^a-z]|$)|banque|(^|[^a-z])rib([^a-z]|$)|relev[eé] de compte|attestation|convocation|bulletin de (salaire|paie)|fiche de paie|payslip'; D = '04_Personnel\Administratif'; C = 'Personnel' }
-    @{ M = '(^|[^a-z])ao([^a-z]|$)|appel.?d.?offre|tender|(^|[^a-z])rfp([^a-z]|$)|offer|offre|proposition|pitch|methodo|framework|playbook'; D = '01_Alpha-Omega-AI\Offres-et-methodes'; C = 'Alpha-Omega-AI' }
-    @{ M = '(^|[^a-z])(ai|ia|genai|llm|gpt|agents?)([^a-z]|$)|artificial intelligence|intelligence artificielle|state of ai|machine learning|knowledge'; D = '01_Alpha-Omega-AI\Offres-et-methodes\Veille-IA'; C = 'Alpha-Omega-AI' }
+    @{ M = 'imp[oô]t|imposition|passeport|paseport|passport|(^|[^a-z])cni([^a-z]|$)|carte.?(vitale|identit)|(^|[^a-z])caf([^a-z]|$)|ameli|cpam|mutuelle|france.?travail|p[oô]le.?emploi|arr[eê]t|m[eé]decin|ordonnance|(^|[^a-z])bail([^a-z]|$)|banque|relev[eé] de compte|attestation|convocation|bulletin de (salaire|paie)|fiche de paie|payslip|indemnit|cerfa|souffrance au travail|performences? review|offer.?letter|maman|papa|parents|samira|mohamed|no[eé]mie|remboursement|syrine|ghalamallah_ilham|\d ghalamallah|^ao\d+_'; D = '04_Personnel\Administratif'; C = 'Personnel' }
+    @{ M = '(^|[^a-z])(cv|resume|curriculum)([^a-z]|$)|résumé|dipl[oô]m|diploma|(^|[^a-z])phd([^a-z]|$)|th[eè]se|publication|certificat|relev[eé] de notes|ilh[eè]me.?.?ghalamallah|lettre de motivation|assignment|(^|[^a-z])(bio|profil)([^a-z]|$)'; D = '04_Personnel\Parcours'; C = 'Personnel' }
+    @{ M = 'contrat|contract|(^|[^a-z])nda([^a-z]|$)|(^|[^a-z])cgv([^a-z]|$)|avenant|bon de commande|purchase order|juridique|mandat|(^|[^a-z])sow([^a-z]|$)|statement of work'; D = '01_Alpha-Omega-AI\Gestion'; C = 'Alpha-Omega-AI' }
+    @{ M = 'appel.?d.?offre|tender|(^|[^a-z])rfp([^a-z]|$)|offer|offre|proposal|proposition|pitch|methodo|framework'; D = '01_Alpha-Omega-AI\Offres-et-methodes'; C = 'Alpha-Omega-AI' }
+    @{ M = '(^|[^a-z])(ai|ia|genai|llm|gpt|agents?|agentic|rag)([^a-z]|$)|agentic|artificial intelligence|intelligence artificielle|state of ai|machine learning|knowledge|analytics|mckinsey|predictions|playbook|roadmap|blueprint|radar'; D = '01_Alpha-Omega-AI\Offres-et-methodes\Veille-IA'; C = 'Alpha-Omega-AI' }
 )
 
 $Cibles = @('01_Alpha-Omega-AI\Clients','01_Alpha-Omega-AI\Offres-et-methodes','01_Alpha-Omega-AI\Site-et-marque',
@@ -73,7 +83,7 @@ $Laisser = '^(desktop\.ini|Custom Office Templates|Modèles Office personnalisé
 $Installeurs = '\.(exe|msi|msix|msixbundle|appx|appxbundle|dmg|pkg)$'
 $Temporaires = '^(~\$.*|thumbs\.db|\.ds_store)$|\.(tmp|crdownload|part|partial)$'
 $Archives    = '\.(zip|rar|7z)$'
-$Illisible   = '^((scan(ned)?|num[eé]risation|img|image|dsc|photo|document|doc|sans titre|untitled|nouveau document( texte)?|new document|fichier|file|download|t[eé]l[eé]chargement|capture( d.?[eé]cran)?|screenshot|copie de)[\s_\-\.\(\)\d]*|[a-z]{0,3}[\s_\-]?\d[\d\s_\-\.\(\)]*)$'
+$Illisible   = '^((export|file)_[0-9a-f\-]{8,}.*|doc-\d{8}-wa\d+_?.*|img[-_]\d{8}.*|screenshot_\d.*|sodapdf.*|winmail.*|report-\d+.*|(scan(ned)?|num[eé]risation|img|image|dsc|photo|document|doc|sans titre|untitled|nouveau document( texte)?|new document|fichier|file|download|t[eé]l[eé]chargement|capture( d.?[eé]cran)?|screenshot|copie de)[\s_\-\.\(\)\d]*|[a-z]{0,3}[\s_\-]?\d[\d\s_\-\.\(\)]*)$'
 $ExtImages   = '\.(jpe?g|png|heic|gif|bmp|webp|tiff?)$'
 
 # ---------------------------------------------------------------------------
