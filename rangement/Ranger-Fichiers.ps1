@@ -16,7 +16,7 @@
          powershell -ExecutionPolicy Bypass -File .\Ranger-Fichiers.ps1 -Execute
     Annulation : lancer le fichier ANNULER_<date>.ps1 créé dans 00_A-trier\_journal_<date>\
 #>
-param([switch]$Execute)
+param([switch]$Execute, [switch]$Renommer)
 
 $ErrorActionPreference = 'Stop'
 # Sans OneDrive : tout est rangé dans les dossiers LOCAUX C:\Users\<vous>\Documents et \Downloads.
@@ -169,6 +169,40 @@ function Add-Action($item, [string]$destRel, [string]$type, [string]$raison, [st
 }
 
 # ---------------------------------------------------------------------------
+# Mode -Renommer : renomme, après coup, les fichiers illisibles déjà rangés par le dernier passage
+if ($Renommer) {
+    $planCsv = Get-ChildItem -LiteralPath (Join-Path $Root $ATrier) -Recurse -Filter 'plan_*.csv' | Sort-Object LastWriteTime | Select-Object -Last 1
+    $lignesPlan = Import-Csv -LiteralPath $planCsv.FullName -Delimiter ';' -Encoding UTF8
+    $annul = @('# Annule les renommages', '$ErrorActionPreference = ''Continue'''); $n = 0
+    foreach ($l in ($lignesPlan | Where-Object { $_.Statut -eq 'fait' -and $_.Type -ne 'à valider' })) {
+        if (-not (Test-Path -LiteralPath $l.Destination -PathType Leaf)) { continue }
+        $item = Get-Item -LiteralPath $l.Destination -Force
+        if ($item.BaseName.ToLower() -notmatch $Illisible) { continue }
+        $rel = $l.Destination.Substring($Root.Length + 1) -split '\\'
+        $client = switch -regex ($rel[0]) {
+            '^01' { if ($rel[1] -eq 'Clients') { $rel[2] } else { 'Alpha-Omega-AI' } }
+            '^02' { 'Softel-Stellantis' }
+            '^03' { 'DermaOxy' }
+            '^04' { 'Personnel' }
+            '^99' { if ($rel.Count -gt 2) { $rel[1] } else { 'Archives' } }
+            default { 'Inconnu' }
+        }
+        $dest = Get-FreePath $item.DirectoryName (New-NomLisible $item $client) $false
+        try {
+            Rename-Item -LiteralPath $item.FullName -NewName (Split-Path $dest -Leaf)
+            $annul += "Rename-Item -LiteralPath '$($dest -replace "'", "''")' -NewName '$($item.Name -replace "'", "''")'"
+            $n++
+        } catch { Write-Host "Renommage impossible : $($item.Name) ($($_.Exception.Message))" -ForegroundColor Red }
+    }
+    $annul | Set-Content -Encoding UTF8 (Join-Path $planCsv.DirectoryName "ANNULER_renommages_$Stamp.ps1")
+    Write-Host "Renommés : $n" -ForegroundColor Green
+    Write-Host ''; Write-Host 'Erreurs du rangement :' -ForegroundColor Yellow
+    $lignesPlan | Where-Object Statut -eq 'ERREUR' | ForEach-Object { Write-Host (' - {0}  =>  {1}' -f (Split-Path $_.Source -Leaf), $_.Erreur) }
+    Write-Host ''; Write-Host 'Encore dans Téléchargements :' -ForegroundColor Yellow
+    Get-ChildItem -LiteralPath $Downloads -Force | ForEach-Object { Write-Host " - $($_.Name)" }
+    return
+}
+
 Write-Host "Téléchargements : $Downloads"
 Write-Host "Documents       : $Documents"
 Write-Host "Sources         : $($Sources -join ' | ')"
@@ -228,13 +262,13 @@ foreach ($it in $Elements) {
 
     $cl = Get-Classement $nom
     $base = $(if ($it.PSIsContainer) { $nom } else { [IO.Path]::GetFileNameWithoutExtension($nom) })
-    $illisible = (-not $it.PSIsContainer) -and ($base.ToLower() -match $Illisible)
+    $estIllisible = (-not $it.PSIsContainer) -and ($base.ToLower() -match $Illisible)
 
     if ($cl) {
-        $nn = $(if ($illisible) { New-NomLisible $it $cl.C } else { $null })
+        $nn = $(if ($estIllisible) { New-NomLisible $it $cl.C } else { $null })
         Add-Action $it $cl.D 'déplacement' $cl.R $nn
     } else {
-        if ($illisible) { $r = 'Nom illisible, aucun indice de client/sujet : ouvrir pour identifier'; $nn = New-NomLisible $it 'Inconnu' }
+        if ($estIllisible) { $r = 'Nom illisible, aucun indice de client/sujet : ouvrir pour identifier'; $nn = New-NomLisible $it 'Inconnu' }
         elseif ($nom -match $ExtImages) { $r = 'Image sans contexte (perso ou pro ?)'; $nn = $null }
         elseif ($it.PSIsContainer) { $r = 'Dossier sans mot-clé client/thème reconnu'; $nn = $null }
         else { $r = 'Aucun mot-clé client/thème reconnu dans le nom'; $nn = $null }
@@ -298,7 +332,11 @@ Write-Host ("Renommés : {0}   À trier : {1}   À valider (suppression) : {2}  
 if ($Execute) {
     $reste = @(Get-ChildItem -LiteralPath $Downloads -Force)
     if ($reste.Count -eq 0) { Write-Host 'Téléchargements est vide.' -ForegroundColor Green }
-    else { Write-Host "Il reste $($reste.Count) élément(s) dans Téléchargements (voir colonne Erreur du plan)." -ForegroundColor Red }
+    else {
+        Write-Host "Il reste $($reste.Count) élément(s) dans Téléchargements :" -ForegroundColor Red
+        $reste | ForEach-Object { Write-Host " - $($_.Name)" }
+        $Plan | Where-Object Statut -eq 'ERREUR' | ForEach-Object { Write-Host (' ! {0}  =>  {1}' -f (Split-Path $_.Source -Leaf), $_.Erreur) -ForegroundColor Red }
+    }
 }
 Write-Host "Plan détaillé : $Journal"
 Invoke-Item $Journal
