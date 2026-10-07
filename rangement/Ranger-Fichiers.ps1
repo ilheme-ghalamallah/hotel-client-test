@@ -32,8 +32,8 @@ $Corbeille = '00_A-trier\_A-valider-suppression'
 #                                    Statut 'Termine' -> 99_Archives\<Nom>
 # ---------------------------------------------------------------------------
 $Clients = @(
-    @{ Nom = 'MGEN';        Motif = 'mgen';                 Statut = 'Actif'   }
-    @{ Nom = 'FoxVisit';    Motif = 'fox.?visit';           Statut = 'Actif'   }
+    @{ Nom = 'MGEN';        Motif = 'mgen';                 Statut = 'Termine'   }
+    @{ Nom = 'FoxVisit';    Motif = 'fox.?visit';           Statut = 'Termine'   }
     @{ Nom = 'SPERO';       Motif = 'spero';                Statut = 'Termine' }
     @{ Nom = 'TFO';         Motif = '(^|[^a-z])tfo';        Statut = 'Termine' }
     @{ Nom = 'Apivia';      Motif = 'apivia';               Statut = 'Termine' }
