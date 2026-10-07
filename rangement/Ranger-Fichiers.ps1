@@ -52,48 +52,54 @@ $Corbeille = '00_A-trier\_A-valider-suppression'
 #                                    Statut 'Termine' -> 99_Archives\<Nom>
 # ---------------------------------------------------------------------------
 $Clients = @(
-    # En cours (fichiers 2025-2026)
-    @{ Nom = 'Hotel-Concierge-WhatsApp'; Motif = 'hotel|concierge|check.?in|whatsapp.?(agent|concierge)'; Statut = 'Actif' }
-    @{ Nom = 'Premodelisation-juridique-IA'; Motif = 'pre.?mod[eé]lisation';  Statut = 'Actif' }
-    @{ Nom = 'MailSense';   Motif = 'mail.?sense';          Statut = 'Actif'   }
-    @{ Nom = 'OWI';         Motif = '(^|[^a-z])owi([^a-z]|$)'; Statut = 'Actif' }
-    @{ Nom = 'Knwler';      Motif = 'knwler';               Statut = 'Actif'   }
-    @{ Nom = 'SPERO';       Motif = 'spero';                Statut = 'Actif'   }
+    # En cours (fichiers récents de Téléchargements)
+    @{ Nom = 'Compliance-GCC-Nussbaumer'; Motif = 'nussbaumer|adgm|dfsa|(^|[^a-z])cip_|compliance.?gcc|loop-protocol|addendum-m-gt'; Statut = 'Actif' }
+    @{ Nom = 'TFO';            Motif = '(^|[^a-z])tfo|investor.?sourcing|investiss|(^|[^a-z])(ksa|gcc|hnwi)([^a-z]|$)|saudi|usd300k|wealth|vivier.?femmes|revue.?femmes|prospect.?ignor|identification des data'; Statut = 'Actif' }
+    @{ Nom = 'BPCE-Assurances-OWI'; Motif = 'bpce|(^|[^a-z])owi([^a-z]|$)|logique.?optimis|sinistre|iard|indemnisation'; Statut = 'Actif' }
+    @{ Nom = 'Owishop';        Motif = 'owishop';                                        Statut = 'Actif' }
+    @{ Nom = 'MailSense';      Motif = 'mail.?sense';                                    Statut = 'Actif' }
+    @{ Nom = 'Hotel-Guest-eXperience'; Motif = 'hotel|concierge|conciergerie|check.?in|whatsapp.?(agent|concierge)|gxol|guest.?experience|^gx-|functional.?specification|sp[eé]cification.?fonctionnelle|technical.?specification'; Statut = 'Actif' }
+    @{ Nom = 'Voltaren';       Motif = 'voltaren|voltaheat';                             Statut = 'Actif' }
+    @{ Nom = 'Berberi';        Motif = 'berberi';                                        Statut = 'Actif' }
+    @{ Nom = 'Frin';           Motif = '(^|[^a-z])frin([^a-z]|$)';                       Statut = 'Actif' }
+    @{ Nom = 'Premodelisation-juridique-IA'; Motif = 'pre.?mod[eé]lisation';             Statut = 'Actif' }
+    @{ Nom = 'Knwler';         Motif = 'knwler';                                         Statut = 'Actif' }
+    @{ Nom = 'SPERO';          Motif = 'spero';                                          Statut = 'Actif' }
     # Terminés
-    @{ Nom = 'MGEN';        Motif = 'mgen';                 Statut = 'Termine' }
-    @{ Nom = 'FoxVisit';    Motif = 'fox.?visit';           Statut = 'Termine' }
-    @{ Nom = 'TFO';         Motif = '(^|[^a-z])tfo';        Statut = 'Termine' }
-    @{ Nom = 'AFPA';        Motif = 'afpa';                 Statut = 'Termine' }
-    @{ Nom = 'Mobilis';     Motif = 'mobilis';              Statut = 'Termine' }
-    @{ Nom = 'Apivia';      Motif = 'apivia';               Statut = 'Termine' }
-    @{ Nom = 'ThoughtSpot'; Motif = 'thought.?spot';        Statut = 'Termine' }
-    @{ Nom = 'MoniA';       Motif = 'monia';                Statut = 'Termine' }
-    @{ Nom = 'Governata';   Motif = 'governata|naima';      Statut = 'Termine' }
-    @{ Nom = 'Finbursa';    Motif = 'finbursa';             Statut = 'Termine' }
-    @{ Nom = 'CAFS';        Motif = 'cafs';                 Statut = 'Termine' }
-    @{ Nom = 'Cybtech';     Motif = 'cybtech';              Statut = 'Termine' }
-    @{ Nom = 'InGrav';      Motif = 'ingrav';               Statut = 'Termine' }
-    @{ Nom = 'Visioneers';  Motif = 'visioneers';           Statut = 'Termine' }
+    @{ Nom = 'MGEN';           Motif = 'mgen|active.?people|preventech|eutelmed|telus|qvct|bu.?sant[eé]|sant[eé].?(milieu|travail|drh)|offres? sant[eé]|samuel|cochenec|samuzl|sprint.?ia|(^|[^a-z])j[1-5]_|playbook.?(j1|questions)|cartographie.?(j1|test|qvct)|liste_use_cases_ia|use_?cases?_(ia_offres|regenere|samuel|v\d)|etat_lieux_process|rapport_final_adapte|myrec_04'; Statut = 'Termine' }
+    @{ Nom = 'VYV';            Motif = '(^|[^a-z])vyv';                                  Statut = 'Termine' }
+    @{ Nom = 'FoxVisit';       Motif = 'fox.?visit';                                     Statut = 'Termine' }
+    @{ Nom = 'AFPA';           Motif = 'afpa';                                           Statut = 'Termine' }
+    @{ Nom = 'Mobilis';        Motif = 'mobilis';                                        Statut = 'Termine' }
+    @{ Nom = 'Apivia';         Motif = 'apivia';                                         Statut = 'Termine' }
+    @{ Nom = 'ThoughtSpot';    Motif = 'thought.?spot';                                  Statut = 'Termine' }
+    @{ Nom = 'MoniA';          Motif = 'monia';                                          Statut = 'Termine' }
+    @{ Nom = 'Governata';      Motif = 'governata|naima';                                Statut = 'Termine' }
+    @{ Nom = 'Finbursa';       Motif = 'finbursa';                                       Statut = 'Termine' }
+    @{ Nom = 'CAFS';           Motif = 'cafs';                                           Statut = 'Termine' }
+    @{ Nom = 'Cybtech';        Motif = 'cybtech';                                        Statut = 'Termine' }
+    @{ Nom = 'InGrav';         Motif = 'ingrav';                                         Statut = 'Termine' }
+    @{ Nom = 'Visioneers';     Motif = 'visioneers';                                     Statut = 'Termine' }
 )
 
 # Règles thématiques, testées dans l'ordre sur le nom du fichier ou du dossier.
 $AO = '(alpha.?omega|aomega|(^|[^a-z])ao[\s_-]?ai)'
 $AvantClients = @(
-    @{ M = 'softel|sofltel|stellantis|john.?paul|nexidia|speech.?analytics|isms|computer use agreement'; D = '02_Softel-Stellantis'; C = 'Softel-Stellantis' }
-    @{ M = 'derma.?oxy';                                                               D = '03_DermaOxy-France';                     C = 'DermaOxy' }
+    @{ M = 'softel|sofltel|stellantis|(^|[^a-z])stel([^a-z]|$)|john.?paul|nexidia|speech.?analytics|cxone|grille.?(qualit|controle)|isms|computer use agreement|ducab'; D = '02_Softel-Stellantis'; C = 'Softel-Stellantis' }
+    @{ M = 'derma|routine de soin|eye gel|base_prospects_premium|comparatif_prix_fonctionnalites_crm';                                                               D = '03_DermaOxy-France';                     C = 'DermaOxy' }
     @{ M = "$AO.*(rib|iban|kbis|statut|factur|devis)|(rib|iban|kbis|statut).*$AO";     D = '01_Alpha-Omega-AI\Gestion';              C = 'Alpha-Omega-AI' }
-    @{ M = '(^|[^a-z])(cockpit|radar|oii)([^a-z]|$)';                                  D = '01_Alpha-Omega-AI\Offres-et-methodes';   C = 'Alpha-Omega-AI' }
-    @{ M = "$AO.*(logo|charte|site|brand|marque|banni|banner|favicon|chanel|\.html)|(logo|banni[eè]re|banner).*$AO|banni[eè]re linkedin|^(logo|charte graphique|favicon)|^alpha-omega-ai.*\.html$"; D = '01_Alpha-Omega-AI\Site-et-marque'; C = 'Alpha-Omega-AI' }
-    @{ M = $AO;                                                                        D = '01_Alpha-Omega-AI\Offres-et-methodes';   C = 'Alpha-Omega-AI' }
-    @{ M = 'edf|engie|loyer|quittance|charges|bouygues|(^|[^a-z])(free|sfr|orange)([^a-z]|$)|comptededepots|(^|[^a-z])(rib|iban)([^a-z_]|_0)|nickel|(^|[^a-z])sepa([^a-z]|$)'; D = '04_Personnel\Administratif'; C = 'Personnel' }
-    @{ M = 'factur|invoice|devis|avoir|note de frais|urssaf|kbis|statuts|compta|bilan|(^|[^a-z])tva([^a-z]|$)|liasse'; D = '01_Alpha-Omega-AI\Gestion'; C = 'Alpha-Omega-AI' }
+    @{ M = "$AO.*(logo|charte|site|marque|banni|banner|favicon|chanel|template|branding|\.html)|(logo|banni[eè]re|banner).*$AO|banni[eè]re linkedin|^(logo|charte graphique|favicon)|^alpha-omega-ai.*\.html$"; D = '01_Alpha-Omega-AI\Site-et-marque'; C = 'Alpha-Omega-AI' }
+    @{ M = 'edf|engie|loyer|quittance|location|r[eé]partition.?charges|bouygues|suravenir|assurance.?emprunteur|substitution|certificat d.adh|serenite|[eé]ch[eé]ance|pr[eê]t(_|\s|$)|renouvellement|devis de remboursement|demande de pi[eè]ces|affidavit|convention de stage|stage|rib gab|(^|[^a-z])(free|sfr|orange)([^a-z]|$)|comptededepots|(^|[^a-z])(rib|iban)([^a-z_]|_0)|nickel|(^|[^a-z])sepa([^a-z]|$)'; D = '04_Personnel\Administratif'; C = 'Personnel' }
+    @{ M = 'factur|invoice|souscripteurs|extrait rbe|d[eé]p[oô]t de capital|devis|avoir|note de frais|urssaf|kbis|statuts|compta|bilan|(^|[^a-z])tva([^a-z]|$)|liasse'; D = '01_Alpha-Omega-AI\Gestion'; C = 'Alpha-Omega-AI' }
 )
 $ApresClients = @(
-    @{ M = 'imp[oô]t|imposition|passeport|paseport|passport|(^|[^a-z])cni([^a-z]|$)|carte.?(vitale|identit)|(^|[^a-z])caf([^a-z]|$)|ameli|cpam|mutuelle|france.?travail|p[oô]le.?emploi|arr[eê]t|m[eé]decin|ordonnance|(^|[^a-z])bail([^a-z]|$)|banque|relev[eé] de compte|attestation|convocation|bulletin de (salaire|paie)|fiche de paie|payslip|indemnit|cerfa|souffrance au travail|performences? review|offer.?letter|maman|papa|parents|samira|mohamed|no[eé]mie|remboursement|syrine|ghalamallah_ilham|\d ghalamallah|^ao\d+_'; D = '04_Personnel\Administratif'; C = 'Personnel' }
-    @{ M = '(^|[^a-z])(cv|resume|curriculum)([^a-z]|$)|résumé|dipl[oô]m|diploma|(^|[^a-z])phd([^a-z]|$)|th[eè]se|publication|certificat|relev[eé] de notes|ilh[eè]me.?.?ghalamallah|lettre de motivation|assignment|(^|[^a-z])(bio|profil)([^a-z]|$)'; D = '04_Personnel\Parcours'; C = 'Personnel' }
-    @{ M = 'contrat|contract|(^|[^a-z])nda([^a-z]|$)|(^|[^a-z])cgv([^a-z]|$)|avenant|bon de commande|purchase order|juridique|mandat|(^|[^a-z])sow([^a-z]|$)|statement of work'; D = '01_Alpha-Omega-AI\Gestion'; C = 'Alpha-Omega-AI' }
+    @{ M = '(^|[^a-z])(cockpit|radar|oii)([^a-z]|$)';                                  D = '01_Alpha-Omega-AI\Offres-et-methodes';   C = 'Alpha-Omega-AI' }
+    @{ M = 'imp[oô]t|imposition|passeport|paseport|passport|(^|[^a-z])cni([^a-z]|$)|carte.?(vitale|identit)|(^|[^a-z])caf([^a-z]|$)|ameli|cpam|mutuelle|france.?travail|p[oô]le.?emploi|arr[eê]t|m[eé]decin|ordonnance|(^|[^a-z])bail([^a-z]|$)|banque|relev[eé] de compte|attestation|convocation|bulletin de (salaire|paie)|fiche de paie|payslip|indemnit|cerfa|souffrance au travail|performences? review|offer.?letter|maman|papa|parents|samira|mohamed|no[eé]mie|remboursement|syrine|ghalamallah_ilham|rh ghalamallah|\d ghalamallah|^ao\d+_'; D = '04_Personnel\Administratif'; C = 'Personnel' }
+    @{ M = '(^|[^a-z])(cv|resume|curriculum)([^a-z]|$)|résumé|dipl[oô]m|diploma|(^|[^a-z])phd([^a-z]|$)|(^|[^a-z])th[eè]se|publication|certificat|relev[eé] de notes|ilh[eè]me.?.?ghalamallah|lettre de motivation|assignment|(^|[^a-z])(bio|profil)([^a-z]|$)'; D = '04_Personnel\Parcours'; C = 'Personnel' }
+    @{ M = 'contrat|contract|(^|[^a-z])nda([^a-z]|$)|(^|[^a-z])cgv([^a-z]|$)|avenant|bon de commande|purchase order|juridique|mandat|(^|[^a-z])sow([^a-z]|$)|statement of work|agreement'; D = '01_Alpha-Omega-AI\Gestion'; C = 'Alpha-Omega-AI' }
+    @{ M = "$AO|(^|[^a-z])ao([^a-z]|$)";                                               D = '01_Alpha-Omega-AI\Offres-et-methodes';   C = 'Alpha-Omega-AI' }
     @{ M = 'appel.?d.?offre|tender|(^|[^a-z])rfp([^a-z]|$)|offer|offre|proposal|proposition|pitch|methodo|framework'; D = '01_Alpha-Omega-AI\Offres-et-methodes'; C = 'Alpha-Omega-AI' }
-    @{ M = '(^|[^a-z])(ai|ia|genai|llm|gpt|agents?|agentic|rag)([^a-z]|$)|agentic|artificial intelligence|intelligence artificielle|state of ai|machine learning|knowledge|analytics|mckinsey|predictions|playbook|roadmap|blueprint|radar'; D = '01_Alpha-Omega-AI\Offres-et-methodes\Veille-IA'; C = 'Alpha-Omega-AI' }
+    @{ M = '(^|[^a-z])(ai|ia|lia|genai|llm|gpt|agents?|agentic|rag)([^a-z]|$)|lia-|cognigy|agentic|artificial intelligence|intelligence artificielle|state of ai|machine learning|knowledge|analytics|mckinsey|predictions|playbook|roadmap|blueprint|radar'; D = '01_Alpha-Omega-AI\Offres-et-methodes\Veille-IA'; C = 'Alpha-Omega-AI' }
 )
 
 $Cibles = @('01_Alpha-Omega-AI\Clients','01_Alpha-Omega-AI\Offres-et-methodes','01_Alpha-Omega-AI\Site-et-marque',
@@ -102,8 +108,8 @@ $Cibles = @('01_Alpha-Omega-AI\Clients','01_Alpha-Omega-AI\Offres-et-methodes','
 $NomsCibles = '^(00_A-trier|01_Alpha-Omega-AI|02_Softel-Stellantis|03_DermaOxy-France|04_Personnel|99_Archives)$'
 # Dossiers d'applications laissés en place dans Documents
 $Laisser = '^(desktop\.ini|Custom Office Templates|Modèles Office personnalisés|Fichiers Outlook|Outlook Files|WindowsPowerShell|PowerShell|Zoom|My Music|My Pictures|My Videos|Ma musique|Mes images|Mes vidéos|Sound recordings|Enregistrements audio|Visual Studio.*|IISExpress|My Web Sites|Default\.rdp)$'
-$Installeurs = '\.(exe|msi|msix|msixbundle|appx|appxbundle|dmg|pkg)$'
-$Temporaires = '^(~\$.*|thumbs\.db|\.ds_store)$|\.(tmp|crdownload|part|partial)$'
+$Installeurs = '\.(exe|msi|msix|msixbundle|appx|appxbundle|dmg|pkg|iso)$'
+$Temporaires = '^(~\$.*|thumbs\.db|\.ds_store)$|\.(tmp|crdownload|part|partial|adding)$'
 $Archives    = '\.(zip|rar|7z)$'
 $Illisible   = '^((export|file)_[0-9a-f\-]{8,}.*|doc-\d{8}-wa\d+_?.*|img[-_]\d{8}.*|screenshot_\d.*|sodapdf.*|winmail.*|report-\d+.*|(scan(ned)?|num[eé]risation|img|image|dsc|photo|document|doc|sans titre|untitled|nouveau document( texte)?|new document|fichier|file|download|t[eé]l[eé]chargement|capture( d.?[eé]cran)?|screenshot|copie de)[\s_\-\.\(\)\d]*|[a-z]{0,3}[\s_\-]?\d[\d\s_\-\.\(\)]*)$'
 $ExtImages   = '\.(jpe?g|png|heic|gif|bmp|webp|tiff?)$'
@@ -168,7 +174,7 @@ Write-Host "Sources         : $($Sources -join ' | ')"
 Write-Host ($(if ($Execute) { 'MODE EXÉCUTION' } else { 'MODE SIMULATION (aucun fichier touché)' })) -ForegroundColor Yellow
 
 $Elements = @()
-$Elements += Get-ChildItem -LiteralPath $Downloads -Force
+$Elements += Get-ChildItem -LiteralPath $Downloads -Force | Where-Object { $_.Name -notmatch '^Ranger-Fichiers' }
 $Elements += $Sources | Where-Object { $_ -ne $Downloads } | ForEach-Object { Get-ChildItem -LiteralPath $_ -Force } |
     Where-Object { $_.Name -notmatch $NomsCibles -and $_.Name -notmatch $Laisser }
 # Dossiers « fourre-tout » de la société : on range leur contenu un par un au lieu de les déplacer en bloc
@@ -212,7 +218,7 @@ foreach ($it in $Elements) {
         if ($nom -match $Temporaires)  { Add-Action $it $Corbeille 'à valider' 'Fichier temporaire / verrou Office / téléchargement incomplet'; continue }
         if ($nom -match $Installeurs)  { Add-Action $it $Corbeille 'à valider' 'Installeur de logiciel'; continue }
         if ($nom -match $Archives) {
-            $b = ([IO.Path]::GetFileNameWithoutExtension($nom)) -replace '\s*\(\d+\)$', ''
+            $b = [IO.Path]::GetFileNameWithoutExtension($nom)
             $extrait = $Sources | ForEach-Object { Join-Path $_ $b } | Where-Object { Test-Path -LiteralPath $_ -PathType Container } | Select-Object -First 1
             if ($extrait) { Add-Action $it $Corbeille 'à valider' "Archive déjà extraite dans : $extrait"; continue }
         }
