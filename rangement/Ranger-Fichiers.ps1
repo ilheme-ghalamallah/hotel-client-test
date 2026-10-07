@@ -19,10 +19,30 @@
 param([switch]$Execute)
 
 $ErrorActionPreference = 'Stop'
-$Downloads = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
-if (-not $Downloads) { $Downloads = Join-Path $env:USERPROFILE 'Downloads' }
-$Documents = [Environment]::GetFolderPath('MyDocuments')
+# Sans OneDrive : tout est rangé dans les dossiers LOCAUX C:\Users\<vous>\Documents et \Downloads.
+# Le contenu éventuellement resté dans C:\Users\<vous>\OneDrive*\Documents (ou Téléchargements) est rapatrié.
+$Downloads = Join-Path $env:USERPROFILE 'Downloads'
+$Documents = Join-Path $env:USERPROFILE 'Documents'
 $Root      = $Documents
+$Sources   = @($Downloads, $Documents) + @(Get-ChildItem -LiteralPath $env:USERPROFILE -Directory -Filter 'OneDrive*' -ErrorAction SilentlyContinue |
+    ForEach-Object { foreach ($s in 'Documents','Downloads','Téléchargements') { Join-Path $_.FullName $s } } |
+    Where-Object { Test-Path -LiteralPath $_ -PathType Container })
+foreach ($d in $Downloads, $Documents) { if (-not (Test-Path -LiteralPath $d)) { New-Item -ItemType Directory -Path $d | Out-Null } }
+
+if (Get-Process -Name OneDrive -ErrorAction SilentlyContinue) {
+    Write-Host 'OneDrive est encore ouvert. Dissociez ce PC de OneDrive et quittez OneDrive, puis relancez le script.' -ForegroundColor Red
+    exit 1
+}
+# Fichiers « uniquement en ligne » (nuage) : ils ne sont pas sur le disque, les déplacer les casserait.
+$EnLigne = @($Sources | ForEach-Object { Get-ChildItem -LiteralPath $_ -Recurse -File -Force -ErrorAction SilentlyContinue } |
+    Where-Object { ($_.Attributes -band 0x400000) -or ($_.Attributes -band 0x1000) })
+if ($EnLigne.Count -gt 0) {
+    $liste = Join-Path $env:USERPROFILE "Desktop\fichiers_uniquement_en_ligne_$(Get-Date -Format yyyy-MM-dd_HHmm).txt"
+    $EnLigne.FullName | Set-Content -Encoding UTF8 $liste
+    Write-Host "$($EnLigne.Count) fichier(s) ne sont que dans le nuage OneDrive (liste : $liste)." -ForegroundColor Red
+    Write-Host 'Rouvrez OneDrive, clic droit sur le dossier OneDrive > « Toujours conserver sur cet appareil », attendez la fin, puis dissociez et relancez.' -ForegroundColor Red
+    exit 1
+}
 $Stamp     = Get-Date -Format 'yyyy-MM-dd_HHmm'
 $ATrier    = '00_A-trier'
 $Corbeille = '00_A-trier\_A-valider-suppression'
@@ -142,19 +162,21 @@ function Add-Action($item, [string]$destRel, [string]$type, [string]$raison, [st
 # ---------------------------------------------------------------------------
 Write-Host "Téléchargements : $Downloads"
 Write-Host "Documents       : $Documents"
+Write-Host "Sources         : $($Sources -join ' | ')"
 Write-Host ($(if ($Execute) { 'MODE EXÉCUTION' } else { 'MODE SIMULATION (aucun fichier touché)' })) -ForegroundColor Yellow
 
 $Elements = @()
 $Elements += Get-ChildItem -LiteralPath $Downloads -Force
-$Elements += Get-ChildItem -LiteralPath $Documents -Force | Where-Object { $_.Name -notmatch $NomsCibles -and $_.Name -notmatch $Laisser }
-$Laisses  = Get-ChildItem -LiteralPath $Documents -Force | Where-Object { $_.Name -match $Laisser }
+$Elements += $Sources | Where-Object { $_ -ne $Downloads } | ForEach-Object { Get-ChildItem -LiteralPath $_ -Force } |
+    Where-Object { $_.Name -notmatch $NomsCibles -and $_.Name -notmatch $Laisser }
+$Laisses  = $Sources | Where-Object { $_ -ne $Downloads } | ForEach-Object { Get-ChildItem -LiteralPath $_ -Force } | Where-Object { $_.Name -match $Laisser }
 
 # --- Doublons : fichiers libres (racine Téléchargements/Documents) identiques à un autre fichier ---
 Write-Host 'Recherche des doublons (empreinte SHA-256)...'
 $Libres = @($Elements | Where-Object { -not $_.PSIsContainer })
 $LibresSet = @{}; foreach ($f in $Libres) { $LibresSet[$f.FullName] = $true }
-$Reference = @($Libres) + @(Get-ChildItem -LiteralPath $Documents -Recurse -File -Force -ErrorAction SilentlyContinue |
-    Where-Object { $_.FullName -notmatch '\\_ORGANIZED_' -and $_.DirectoryName -ne $Documents })
+$Reference = @($Libres) + @($Sources | Where-Object { $_ -ne $Downloads } | ForEach-Object { Get-ChildItem -LiteralPath $_ -Recurse -File -Force -ErrorAction SilentlyContinue } |
+    Where-Object { $_.FullName -notmatch '\\_ORGANIZED_' -and $Sources -notcontains $_.DirectoryName })
 $TaillesLibres = @{}; foreach ($f in $Libres) { if ($f.Length -gt 0) { $TaillesLibres[$f.Length] = $true } }
 $Doublons = @{}
 $Reference | Where-Object { $TaillesLibres.ContainsKey($_.Length) } | Group-Object Length | Where-Object Count -gt 1 | ForEach-Object {
@@ -184,7 +206,7 @@ foreach ($it in $Elements) {
         if ($nom -match $Installeurs)  { Add-Action $it $Corbeille 'à valider' 'Installeur de logiciel'; continue }
         if ($nom -match $Archives) {
             $b = ([IO.Path]::GetFileNameWithoutExtension($nom)) -replace '\s*\(\d+\)$', ''
-            $extrait = @($Downloads, $Documents) | ForEach-Object { Join-Path $_ $b } | Where-Object { Test-Path -LiteralPath $_ -PathType Container } | Select-Object -First 1
+            $extrait = $Sources | ForEach-Object { Join-Path $_ $b } | Where-Object { Test-Path -LiteralPath $_ -PathType Container } | Select-Object -First 1
             if ($extrait) { Add-Action $it $Corbeille 'à valider' "Archive déjà extraite dans : $extrait"; continue }
         }
     }
